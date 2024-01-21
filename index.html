@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Webpage</title>
+  <title>EBFT</title>
   <script src="script.js"></script>
   <script src="node.js"></script>
   <link rel="stylesheet" href="all.css">
@@ -27,10 +27,14 @@
   <div id = "root1" style="height: 93%; width: 100%; background-color: #d9ebf3; position: relative;" >
   <div id = "root" style="height: 72%; width: 100%; background-color: #d9ebf3;" ></div>
   <div id = "root2" style="height: 13%; width: 100%; background-color: #d9ebf3;" ></div>
-  <div id = "root3" >
-    <button  class="css-button-arrow--black" style=" position: absolute; top: 85%;left : 90%;"  onclick="continueButtonFunction()">Continue</button>
-  <button  class="css-button-arrow--black" style=" position: absolute; top: 93%;left : 90%;"  onclick="reRun()">rerun</button>
-  <!-- <button  class="css-button-arrow--black" style=" position: absolute; top: 95%;left : 90%;"  onclick="back()">back</button> -->
+  <div id = "root3" style="width: 100%; position: absolute; top: 80%; display: flex; justify-content: space-between; flex-direction:row;">
+    <button  class="css-button-arrow--black--left" style="margin: 2%;"  onclick="back()">
+      <span class="css-button-arrow__text" style="transform: scaleX(-1)">back</span>
+    </button>
+    <div style="width: 160px; ">
+        <button  class="css-button-arrow--black" style=" margin:2%;"  onclick="continueButtonFunction()">Continue</button>
+        <button  class="css-button-arrow--black" style=" margin:2%;" onclick="reRun()">rerun</button>
+    </div>
   </div>
   </div>
   

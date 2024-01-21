@@ -328,7 +328,7 @@ function createTextElement(text, top, left, size) {
 }
 
 
-function createTextElementFree(text, top, left, size) {
+function createFreeTextElement(text, top, left, size) {
   // 创建一个新的<p>元素
   var p = document.createElement('p');
   var root = document.getElementById("root")
@@ -338,8 +338,8 @@ function createTextElementFree(text, top, left, size) {
   // 设置元素的位置
   p.style.position = 'absolute';
   p.style.top = top + '%';
-  p.style.left = 0 + '%';
-  p.style.width = '100%';
+  p.style.left = left + '%';
+  p.style.width = 'auto';
   p.fontFamily = "Glyphicons Halflings"
   p.style.fontSize = size + "px"
   p.style.textAlign = "center"
@@ -435,17 +435,67 @@ function createBlock(x, y, width, height, color, status, number) {
     content.setAttribute("dominant-baseline", "middle");
     content.innerHTML = text;
     return content
-   }
-
-
+  }
 
   return {
     block: block,
     innerCircle: innerCircle
   }; 
-
-
 }
+
+
+
+
+function createBlockFree(x, y, width, height, color, status, number) {
+  var bsaex = x;
+  var bsaey = y;
+  var block = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  block.style.left = bsaex + "%";
+  block.style.top = bsaey + "%";
+  block.style.position = "absolute";
+  block.style.zIndex = "1";
+  block.setAttribute("height", "34");
+  block.setAttribute("width", "44");
+
+  var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  innerCircle.setAttribute("fill", color);
+  innerCircle.setAttribute("width", width);
+  innerCircle.setAttribute("height", height);
+  innerCircle.setAttribute("x", 2);
+  innerCircle.setAttribute("y", 2);
+  innerCircle.setAttribute("stroke", status);
+  innerCircle.setAttribute("rx", "5");
+  innerCircle.setAttribute("ry", "5");
+  innerCircle.setAttribute("stroke-width", "2");
+  var content = createContent(22,20,number)
+  block.appendChild(innerCircle);
+  block.appendChild(content);
+  var root = document.getElementById("root");
+  root.appendChild(block);
+
+  function createContent(x,y,text){
+
+    var content = document.createElementNS("http://www.w3.org/2000/svg","text");
+    content.setAttribute("x", x);
+    content.setAttribute("y", y);
+    content.setAttribute("fill", "black");
+    content.setAttribute("font-size", "20");
+    content.setAttribute("text-anchor", "middle");
+    content.setAttribute("dominant-baseline", "middle");
+    content.innerHTML = text;
+    return content
+  }
+
+  return {
+    block: block,
+    innerCircle: innerCircle
+  }; 
+}
+
+
+
+
+
 function createLine(x1, y1, x2, y2, color) {
   var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("height", "100%");
