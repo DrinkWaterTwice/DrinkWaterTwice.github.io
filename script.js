@@ -491,7 +491,7 @@ function run(){
     createLine(16,50,16,60,"black")
     createLine(76,50,76,60,"black")
     let p6 = createTextElement("其他节点接收到节点验证满足LCCR后,发出对该节点的投票以及转发该区块",85,30,30)
-    let p7 = createTextElement("我们假设转发的区块包含在了投票中,实际上是单独转发的",95,30,30)
+    let p7 = createTextElement("我们假设转发的区块包含在了投票中,实际上是单独转发的",90,30,30)
     let v1 = createVote(46,12,"#B0C4DE",1)
     let v2 = createVote(46,12,"#B0C4DE",1)
     let v3 = createVote(26,55,"#B0C4DE",1)
