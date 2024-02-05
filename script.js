@@ -9,7 +9,7 @@
 //todo diss一下现有的BFT算法 没啥头绪，详细会导致篇幅过长，得在现有引擎加不少东西，不详细又没啥意义
 //静态网页 给的模板比直接看论文强的有限，考虑直接套raft那个
 //修改图形中心坐标，用来防止图形缩放的时候错位 完成
-let step = 47;
+let step = -1;
 let timers = []
 let globalTimer = null;
 let continueButton;
