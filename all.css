@@ -80,6 +80,10 @@ html, body {
     transition: 0.4s;
   }
 
+  body{
+    zoom: 1;
+  }
+
 
 
 

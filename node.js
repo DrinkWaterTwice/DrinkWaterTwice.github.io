@@ -1,18 +1,20 @@
 var currentTime = 0;
 var trueTime = 0;
-
+var budingx = 5;
+var budingy = 10; 
 
 function createTimer(id,left,top,r,time,height,color) {
  var cancel = false;
  var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
- circle.setAttribute("width", "134");
- circle.setAttribute("height", "134");
- circle.style.left = left + "%";
- circle.style.top = top + "%";
+ circle.setAttribute("width", "1");
+ circle.setAttribute("height", "1");
+circle.style.left = (left + budingx) + "%"
+circle.style.top = (top + budingy) + "%"; 
  circle.style.position = "absolute";
  circle.style.zIndex = "20";
- x = 67
- y = 67 
+  circle.style.overflow = "visible"
+ x = 0
+ y = 0 
  //document.body.appendChild(circle);
  var outerCircle = createOutCircle(x,y,r)
  circle.appendChild(outerCircle);
@@ -163,15 +165,16 @@ function createTimer(id,left,top,r,time,height,color) {
 function createWaitState(id,left,top,r,outColor,innerColor, height) {
 
 var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
-circle.setAttribute("width", "134");
-circle.setAttribute("height", "134");
-circle.style.left = left + "%"
-circle.style.top = top + "%";
+circle.setAttribute("width", "1");
+circle.setAttribute("height", "1");
+circle.style.left = (left + budingx) + "%"
+circle.style.top = (top + budingy) + "%";
 circle.style.position = "absolute";
 circle.style.zIndex = "20";
+circle.style.overflow = "visible"
 
-x = 67
-y = 67 
+x = 0
+y = 0 
 
 var innerCircle = createInnerCircle(x,y,r)
 circle.appendChild(innerCircle);
@@ -247,13 +250,16 @@ if(master == 0)
 function createSingleNode(left,top,r){
 id = 1
 var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
- circle.setAttribute("width", "134");
- circle.setAttribute("height", "134");
- circle.style.left = left + "px";
- circle.style.top = top + "px";
+ circle.setAttribute("width", "1");
+ circle.setAttribute("height", "1");
+  circle.style.left = (left + budingx) + "%"
+  circle.style.top = (top + budingy) + "%";
+
  circle.style.position = "absolute";
- x = 67
- y = 67 
+  circle.style.zIndex = "20";
+  circle.style.overflow = "visible"
+ x = 0
+ y = 0
 
  var innerCircle = createInnerCircle(x,y,r)
  circle.appendChild(innerCircle);
@@ -318,7 +324,8 @@ function createTextElement(text, top, left, size) {
     p.style.position = 'absolute';
     p.style.top = top + '%';
     p.style.left = 0 + '%';
-    p.style.width = '100%';
+    p.style.width = '60%';
+    p.style.margin = '0 20% 0 20%';
     p.fontFamily = "Glyphicons Halflings"
     p.style.fontSize = size + "px"
     p.style.textAlign = "center"
@@ -356,21 +363,23 @@ function createVote(x, y,color,text, outColor) {
   if(outColor == null){
     outColor = "black"
   }
-  circle.style.left = bsaex + "%";
-  circle.style.top = bsaey + "%";
+  circle.style.left = (bsaex + budingx) + "%";
+  circle.style.top = (bsaey + budingy) + "%";
   circle.style.position = "absolute";
   circle.style.zIndex = "1";
-  circle.setAttribute("height", "134");
-  circle.setAttribute("width", "134");
+  circle.setAttribute("height", "1");
+  circle.setAttribute("width", "1");
+  circle.style.overflow = "visible"
+  circle.style.zIndex = "19";
 
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
   innerCircle.setAttribute("fill", color);
-  innerCircle.setAttribute("cx", "67");
-  innerCircle.setAttribute("cy", "67");
+  innerCircle.setAttribute("cx", "0");
+  innerCircle.setAttribute("cy", "0");
   innerCircle.setAttribute("r", "13");
   innerCircle.setAttribute("stroke", outColor);
   innerCircle.setAttribute("stroke-width", "2");
-  var content = createContent(67,68,text)
+  var content = createContent(0,0,text)
   circle.appendChild(innerCircle);
   circle.appendChild(content);
   var root = document.getElementById("root");
@@ -401,24 +410,26 @@ function createBlock(x, y, width, height, color, status, number) {
   var bsaex = x;
   var bsaey = y;
   var block = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  block.style.left = bsaex + "%";
-  block.style.top = bsaey + "%";
+  block.style.left = (bsaex + budingx) + "%";
+  block.style.top = (bsaey + budingy) + "%";
   block.style.position = "absolute";
-  block.style.zIndex = "1";
-  block.setAttribute("height", "134");
-  block.setAttribute("width", "134");
-
+  //用这个来标记这个是一个block
+  block.style.zIndex = "13";
+  block.setAttribute("height", "1");
+  block.setAttribute("width", "1");
+  //当svg内元素溢出时不隐藏
+  block.style.overflow = "visible"
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   innerCircle.setAttribute("fill", color);
   innerCircle.setAttribute("width", width);
   innerCircle.setAttribute("height", height);
-  innerCircle.setAttribute("x", 67 - width / 2 - 2);
-  innerCircle.setAttribute("y", 67 - height / 2 - 2);
-  innerCircle.setAttribute("stroke", status);
+  innerCircle.setAttribute("x", -width / 2);
+  innerCircle.setAttribute("y", -height / 2);
   innerCircle.setAttribute("rx", "5");
-  innerCircle.setAttribute("ry", "5");
+  innerCircle.setAttribute("ry", "5");  
+  innerCircle.setAttribute("stroke", status);
   innerCircle.setAttribute("stroke-width", "2");
-  var content = createContent(65,67,number)
+  var content = createContent(0,0,number)
   block.appendChild(innerCircle);
   block.appendChild(content);
   var root = document.getElementById("root");
@@ -447,27 +458,28 @@ function createBlock(x, y, width, height, color, status, number) {
 
 
 function createBlockFree(x, y, width, height, color, status, number) {
-  var bsaex = x;
-  var bsaey = y;
+  var bsaex = x + 1;
+  var bsaey = y + 3;
   var block = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   block.style.left = bsaex + "%";
   block.style.top = bsaey + "%";
   block.style.position = "absolute";
-  block.style.zIndex = "1";
-  block.setAttribute("height", "34");
-  block.setAttribute("width", "44");
+  block.style.zIndex = "14";
+  block.style.overflow = "visible"
+  block.setAttribute("height", "1");
+  block.setAttribute("width", "1");
 
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   innerCircle.setAttribute("fill", color);
   innerCircle.setAttribute("width", width);
   innerCircle.setAttribute("height", height);
-  innerCircle.setAttribute("x", 2);
-  innerCircle.setAttribute("y", 2);
+  innerCircle.setAttribute("x", -width / 2);
+  innerCircle.setAttribute("y", -height / 2);
   innerCircle.setAttribute("stroke", status);
   innerCircle.setAttribute("rx", "5");
   innerCircle.setAttribute("ry", "5");
   innerCircle.setAttribute("stroke-width", "2");
-  var content = createContent(22,20,number)
+  var content = createContent(0,0,number)
   block.appendChild(innerCircle);
   block.appendChild(content);
   var root = document.getElementById("root");
@@ -504,10 +516,10 @@ function createLine(x1, y1, x2, y2, color) {
   svg.style.pointerEvents = "none";
 
   var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  line.setAttribute("x1", (x1 + 4.40) + "%");
-  line.setAttribute("y1", (y1 + 8.815) + "%");
-  line.setAttribute("x2", (x2 + 4.40)  +  "%");
-  line.setAttribute("y2", (y2 + 8.815) + "%");
+  line.setAttribute("x1", (x1 + budingx) + "%");
+  line.setAttribute("y1", (y1 + budingy) + "%") ;
+  line.setAttribute("x2", (x2 + budingx) + "%");
+  line.setAttribute("y2", (y2 + budingy) + "%");
   line.setAttribute("stroke", color);
   line.setAttribute("stroke-width", "2");
   svg.appendChild(line);
