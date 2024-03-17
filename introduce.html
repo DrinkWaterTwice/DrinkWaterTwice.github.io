@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBFT: An Equal Algorithm Simplifying BFT Consensus</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+
+            margin: auto;
+            width: 800px;
+            padding: 0;
+
+            line-height: 1.6;
+            font-size: 18px;
+            /* 设置默认字体大小为18px */
+
+            background-color: #6d695c;
+            background-image:
+                repeating-linear-gradient(120deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px),
+                repeating-linear-gradient(60deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px),
+                linear-gradient(60deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1)),
+                linear-gradient(120deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1));
+            background-size: 70px 120px;
+        }
+
+        .container {
+
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #808080;
+            /* 设置背景颜色为浅蓝色 */
+        }
+
+        h1 {
+            color: #000000;
+            text-align: center;
+            padding: 0px 0;
+            font-size: 1.5rem;
+            /* 调整标题字体大小 */
+            font-weight: bold;
+        }
+
+        h2,
+        h3 {
+            color: #000000;
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+            /* 调整副标题字体大小 */
+        }
+
+        p,
+        ul {
+            color: #000000;
+            font-size: 0.9rem;
+            /* 调整段落字体大小 */
+            text-align: justify;
+        }
+
+        ul {
+            margin-left: 10px;
+        }
+
+        *-- header {
+            background-color: #f8f9fa;
+            padding: 5px;
+            border-bottom: 1px solid #000000;
+
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border-bottom: 1px solid #000000;
+
+        }
+
+        nav li {
+            float: left;
+        }
+
+        nav li a {
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 7px 8px;
+            text-decoration: underline;
+        }
+
+        nav li a:hover {
+            background-color: #ddd;
+        }
+
+        .codeBlock {
+            background-color: #8a8787;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #000000;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .annotation {
+            color: #34353c;
+        }
+
+        #floatingMenu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #baa7a7;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #floatingMenu a {
+            text-decoration: none;
+            color: #000;
+            font-size: 0.8rem;
+            cursor: pointer;
+
+        }
+
+        #floatingMenu a:hover {
+            text-decoration: none;
+            color: #d0c3c3;
+            font-size: 0.7rem;
+            cursor: pointer;
+
+        }
+
+        .submenu {
+            display: none;
+            list-style-type: none;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .submenu ul li {
+            list-style: none;
+            margin-top: 3px;
+        }
+
+        #floatingMenu li {
+            list-style: none;
+            margin-top: 3px;
+        }
+    </style>
+    <script>
+        function toggleSubmenu(id) {
+            var submenu = document.getElementById(id);
+            if (submenu.style.display == "block") {
+                submenu.style.display = "none";
+            } else {
+                submenu.style.display = "block";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- <div id="floatingMenu">
+            <li><a href="#title" onclick="toggleSubmenu('submenu1')">Title</a>
+                <ul id="submenu1" class="submenu">
+                    <li><a href="#section1-1">第一部分 - 子部分1</a></li>
+                    <li><a href="#section1-2">第一部分 - 子部分2</a></li>
+                </ul>
+            </li>
+            <li><a href="#submenu2.1" >Design of the EBFT Algorithm</a>
+            </li>
+            <li><a  onclick="toggleSubmenu('submenu2')">EBFT-Syn</a>
+                <ul id="submenu2" class="submenu">
+                    <li><a href="#section2-1">Blocks and block format</a></li>
+                    <li><a href="#section2-2">Vote and certificate</a></li>
+                    <li><a href="#section2-3">Block chaining and ranking</a></li>
+                    <li><a href="#section2-4">Block producing</a></li>
+                    <li><a href="#section2-5">Block processing</a></li>
+                    <li><a href="#section2-6">Vote processing</a></li>
+                    <li><a href="#section2-7">Timer interrupt processing</a></li>
+                    <li><a href="#section2-8">Pseudocode of EBFT-Syn</a></li>
+                </ul>
+            </li>
+            <li><a onclick="toggleSubmenu('submenu3')">EBFT-PSyn</a>
+                <ul id="submenu3" class="submenu">
+                    <li><a href="#section3-1">Blockchain Structure</a></li>
+                    <li><a href="#section3-2">Block processing</a></li>
+                    <li><a href="#section3-3">Vote processing</a></li>
+                    <li><a href="#section3-4">Pseudocode of EBFT-Syn</a></li>
+                </ul> 
+            </li>
+
+            <li><a href="#section4" onclick="toggleSubmenu('submenu4')">EBFT-Turbo</a>
+            </li>
+            <li><a href="#section5" onclick="toggleSubmenu('submenu5')">Implementation and Evaluation of the EBFT Algorithm</a>
+            </li>
+            <li><a href="#section6" onclick="toggleSubmenu('submenu5')">Other work</a>
+            </li>
+    </div> -->
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">about</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <h1 id="title">EBFT: An Equal Algorithm Simplifying BFT Consensus</h1>
+        <p>The byzantine fault tolerant (BFT) consensus abstraction ensures the consistency among correct (non-faulty)
+            instances even if some instances are byzantine (faulty, incorrect). The correct instances all decide on the
+            same consensus value, whereas byzantine instances may exhibit arbitrary behaviour.</p>
+        <p>We propose EBFT, a simplified BFT consensus framework that consists of three protocols: EBFT-Syn, EBFT-PSyn,
+            and EBFT-Turbo12. These protocols adopt an egalitarian block production strategy that does not rely on a
+            leader, but instead allows nodes to randomly propose blocks by solving cryptographic lotteries. This design
+            enables the protocols to resist attacks targeting the leader, such as bribery attacks and targeted denial of
+            service attacks, and eliminates the need for complex subprotocols to detect and replace faulty leaders.</p>
+        <p>EBFT has the following features:</p>
+        <ul>
+            <li><strong>Equal block generation</strong>: All nodes can generate blocks through cryptographic lottery,
+                not relying on the leader.</li>
+            <li><strong>Longest certification chain rule</strong>: Nodes vote and generate blocks according to the
+                longest certification chain rule, thereby ensuring the security and consistency of the blockchain.</li>
+            <li><strong>Deterministic security and liveness</strong>: Nodes deterministically submit blocks by detecting
+                convergence opportunities, without waiting for probabilistic confirmation.</li>
+        </ul>
+        <h2 id="submenu2.1">Design of the EBFT Algorithm</h2>
+        <p>The EBFT algorithm includes three protocols: EBFT-Syn, EBFT-PSyn, and EBFT-Turbo, which are applicable to
+            synchronous networks and partially synchronous networks respectively. Below we introduce the design of these
+            three protocols.</p>
+        <h3 id="submenu2">EBFT-Syn</h3>
+        <p>EBFT-Syn is a BFT protocol suitable for synchronous networks, requiring the majority of nodes to be honest.
+            It mainly includes the following three components:</p>
+        <ul>
+            <li"><strong>Equal block generation</strong>: Nodes compete to generate blocks through cryptographic
+                lottery, and each node has the opportunity to become a block generator.</li>
+                <li"><br/><br/><strong>Longest certification chain rule</strong>: After a node receives a valid block, if the
+                    block extends the longest certification chain in the local view, it will vote for the block. A block
+                    is certified if it receives at least 𝑓 + 1 votes from nodes, where 𝑓 is the number of Byzantine
+                    nodes. Nodes always generate blocks at the end of the longest certification chain.</li>
+                    <li"><br/><br/><strong>3Δ commit timer</strong>: After a node receives a valid block that extends the longest
+                        certification chain, it sets a 3Δ timer, where Δ is the upper bound of network delay. If before
+                        the timer expires, the node does not receive any blocks conflicting with this block, then this
+                        is a convergence opportunity, and the node will commit this block and all uncommitted ancestor
+                        blocks. In the synchrony model, a message sent at time 𝑡 by a node
+                        will be received by another node before time 𝑡 + Δ. The duration of 3Δ is to ensure that
+                        honest nodes can detect any conflicting blocks, by which they can
+                        commit certified blocks that are unique at their heights. When a
+                        node observes a block that extends the longest certified chain at
+                        the time 𝑡, it then forwards the block to all other nodes. Others will
+                        receive the block by time 𝑡 + Δ, and then honest nodes' votes will
+                        arrive at all nodes by time 𝑡 + 2Δ. Hence, the block will be certified
+                        by time 𝑡 + 2Δ. If any honest node votes for a conflicting block, it
+                        must do so before 𝑡 + 2Δ (by LCCR). As a result, nodes will receive
+                        the conflicting block by 𝑡 + 3Δ.</li>
+        </ul>
+
+
+        <p id="section2-4"><strong>Block producing.</strong>Nodes participate in the cryptographic lottery to win the chance of producing blocks. The parent block of this block will be the highest block the node sees.
+        </p>
+        <p id="section2-5"><strong>Block processing.</strong> Upon receiving a block, a node first assesses its validity. For valid blocks, if they conflict with existing block heights, the node cancels any existing timers associated with that height. If no conflict occurs, the node adds a timer for that block height. Honest nodes generate a vote for blocks that extend the longest chain and broadcast this vote to other nodes while forwarding the block.</p>
+        <p id="section2-6"><strong>Vote processing.</strong> When a node collects votes for a block, it calculates the total number of votes received. If the vote count exceeds f+1, the block is certified, and the node updates the current highest certified block. </p>
+        <p id="section2-7"><strong>Timer interrupt processing.</strong> When a block’s timer is triggered,
+            the node commits this block together with all its non-committed
+            ancestor blocks.</p>
+        <!-- <p id="section2-8">The pseudocode of EBFT-Syn is as follows:</p>
+        <pre class="codeBlock">
+    <code>
+    1: 𝑀 ← {G0 }            <span class="annotation">⊲ the set of blocks</span>
+    2: 𝑉 ← {𝑄𝐶0 }           <span class="annotation">⊲ mapping votes with blocks</span>
+    3: 𝐹 ← {G0 }             <span class="annotation">⊲ the set of committed blocks</span>
+    4: 𝐵′ ← G0              <span class="annotation">⊲ the highest certified block</span>
+    5: (𝑝𝑘, 𝑠𝑘)              <span class="annotation"> ⊲ the key pair of a node</span>
+    6: upon event ⟨Lottery-Win|𝐵⟩ do
+    7: ProduceBlock()          <span class="annotation">⊲ producing blocks</span>
+    8: upon event ⟨Block-Deliver|𝐵⟩ do
+    9: ProcessBlock(𝐵)          <span class="annotation">⊲ processing receiving block</span>
+    10: upon event ⟨Vote-Deliver|𝑣⟩ do
+    11: ProcessVote(𝑣)          <span class="annotation">⊲ processing receiving vote</span>
+    12: upon event ⟨Timer-Interrupt|𝐵⟩ do
+    13: 𝐹 ← 𝐹 ∪ GetAncestorBlocks(𝐵) ∪ {𝐵}   ⊲ committing blocks
+    14: procedure ProduceBlock()
+    15: 𝐵.𝑇 𝑥𝑠 ← GetTransactions()
+    16: 𝐵.ℎ𝑝 ← H(𝐵′)            <span class="annotation">⊲ parent block’s hash</span>
+    17: 𝐵.𝑄𝐶 ← 𝑉 [𝐵′]           <span class="annotation">⊲ parent block’s quorum certificate</span>
+    18: 𝐵.𝜌 ← GetLotteryProof()
+    19: ProcessBlock(𝐵)
+    20: Broadcast(𝐵)
+    21: procedure ProcessBlock(𝐵)
+    22: if ∃𝐵 ∈ 𝑀 then return
+    23: if isValidNewBlock(𝐵) then
+    24: 𝑀 ← 𝑀 ∪ {𝐵}         <span class="annotation">⊲ already been stored</span>
+    25: ProcessCommitTimer(𝐵)
+    26: if isSatisfyingLCCR(𝐵) then
+    27: 𝜎 ← Sig(𝑠𝑘, H(𝐵))       <span class="annotation">⊲ generating a signature</span>
+    28: 𝑣 ← (H(𝐵), 𝑝𝑘, 𝜎)       <span class="annotation">⊲ generating a vote</span>
+    29: ProcessVote(𝑣)
+    30: Broadcast(𝐵, 𝑣)
+    31: procedure ProcessVote(𝑣)
+    32: if {𝐵|𝐵 ∈ 𝑀 ∧ H(𝐵) = 𝑣.ℎ𝑎𝑠ℎ} = ∅ then return
+    33: if ∃𝑣 ∈ 𝑉 [𝐵] then return
+    34: 𝑉 [𝐵] ← 𝑉 [𝐵] ∪ {𝑣 }     <span class="annotation">⊲ storing the vote</span>
+    35: if |𝑉 [𝐵] | ≥ 𝑓 + 1 then
+    36: 𝐵′ ← UpdateHighestCertifiedBlock()
+    37: procedure ProcessCommitTimer(𝐵)
+    38: 𝑆 ← {𝐵∗|𝐵 ≠ 𝐵∗ ∧ 𝐵∗ .ℎ𝑒𝑖𝑔ℎ𝑡 = 𝐵.ℎ𝑒𝑖𝑔ℎ𝑡 } <span class="annotation">⊲ conflicting blocks</span>
+    39: if 𝑆 = ∅ then
+    40: if isSatisfyingLCCR(𝐵) then SetTimer(𝐵, 3Δ)
+    41: else then
+    42: foreach 𝐵 ∗ ∈ 𝑆 do CancelTimer(𝐵∗)</code>
+        </pre> -->
+
+        <h3>EBFT-PSyn</h3>
+        <p>EBFT-PSyn is a BFT protocol suitable for partially synchronous networks, requiring less than one-third of the
+            nodes to be Byzantine. It continues the equal block generation and longest certification chain rule in
+            EBFT-Syn, but introduces two other components:</p>
+        <ul>
+            <li><strong>Commit blocks through uniqueness declarations</strong>: If a block has not received any
+                conflicting blocks before it is received and certified by a node, then this block is locally unique and
+                certified. When a node has a locally unique and certified block, it will broadcast a uniqueness
+                declaration of this block, indicating that it will no longer vote for other blocks of the same height.
+                If a node receives at least 2𝑓 + 1 such declarations, then this is a convergence opportunity, and the
+                node can commit this block and all uncommitted ancestor blocks.</li>
+            <li><strong>Optimization: Pipelining declarations and block votes</strong>: To improve the efficiency of the
+                protocol, a block's uniqueness declaration can be delayed until the voting process of its child block.
+                Therefore, when voting for a block, there are two situations. If its parent block is uniquely certified,
+                the node can send a vote that includes the uniqueness declaration of the parent block. Otherwise, its
+                vote does not include a uniqueness declaration. To achieve this, we distinguish two types of votes:
+                witness votes (witVote) and commit votes (comVote). When a block is certified by at least 2𝑓 + 1
+                comVotes, the node can commit all ancestor blocks of this block.</li>
+        </ul>
+        <p id="section3-1"><strong> Blockchain Structure.</strong> EBFT-PSyn adopts the same block format and chain
+            structure as these in EBFT-Syn. The slight difference
+            lies in that there are two vote types and that a quorum certificate
+            has to contain at least 2𝑓 + 1 distinct votes (rather than 𝑓 + 1 votes).
+
+
+        <p id="section3-2"><strong>Block processing. </strong>When receiving a block, the duplication and
+            validity check is the same as that in Syn. The difference
+            lies in the voting process for a block that satisfies the LCCR. In particular, if the node has voted for any other block
+            at the same height as the block’s parent block, it sends a witVote
+            and the hash of the previously voted block. Otherwise, it sends
+            a comVote. Note that for each block, a node only votes once, but
+            a node can vote for multiple blocks at the same height if they all
+            satisfy LCCR.</p>
+        <p id="section3-3"><strong>Vote processing.</strong>When receiving a vote, a node will store the
+            vote and map the vote with the block. After that, if the associated
+            block becomes certified with no less than 2𝑓 + 1 (regardless of the
+            vote types), the node will update the highest certified block by the
+            function UpdateHighestCertifiedBlock(). Besides, if a block has
+            no less than 2𝑓 + 1 comVotes, it will commit all non-committed
+            ancestor blocks of this block, excluding this block. Here, due to the
+            pipelining structure, nodes actually commit the parent blocks of
+            this block.</p>
+        <p id="section3-4">Since block producing is
+            the same as that in the synchronous network, we do not introduce it here.</p>
+            <!-- it here. The pseudocode of
+            EBFT-PSyn are as follows</p>
+        <pre class="codeBlock">
+                    <code>
+    1: 𝑀 ← {G0}         <span class="annotation">⊲ the set of blocks</span>
+    2: 𝑉 ← {𝑄𝐶0}        <span class="annotation">⊲ mapping votes with blocks</span>
+    3: 𝐹 ← {G0}         <span class="annotation">⊲ the set of committed blocks</span>
+    4: 𝐵' ← G0          <span class="annotation">⊲ the highest certified block</span>
+    5: (𝑝𝑘, 𝑠𝑘)         <span class="annotation">⊲ the key pair of a node</span>
+    6: upon event ⟨Lottery-Win|𝐵⟩ do
+    7: ProduceBlock()       <span class="annotation">⊲ producing blocks</span>
+    8: upon event ⟨Block-Deliver|𝐵⟩ do
+    9: ProcessBlock(𝐵)          <span class="annotation">⊲ processing receiving block</span>
+    10: upon event ⟨Vote-Deliver|𝑣⟩ do
+    11: ProcessVote(𝑣)          <span class="annotation">⊲ processing receiving vote</span>
+    12: procedure ProduceBlock()
+    13: 𝐵.𝑇𝑥𝑠 ← GetTransactions()
+    14: 𝐵.ℎ𝑝 ← H(𝐵′)            <span class="annotation">⊲ parent block’s hash</span>
+    15: 𝐵.𝑄𝐶 ← 𝑉 [𝐵′]           <span class="annotation">⊲ parent block’s quorum certificate</span>
+    16: 𝐵.𝜌 ← GetLotteryProof()
+    17: ProcessBlock(𝐵)
+    18: Broadcast(𝐵)
+    19: procedure ProcessBlock(𝐵)
+    20: if ∃𝐵 ∈ 𝑀 then return       <span class="annotation">⊲ already been stored</span>
+    21: if isValidNewBlock(𝐵) then
+    22: 𝑀 ← 𝑀 ∪ {𝐵}
+    23: if isSatisfyingLCCR(𝐵) then
+    24: if isUniqueParentBlock(𝐵) then
+    25: 𝜎 ← Sig(𝑠𝑘, (H(𝐵), comVote))
+    26: 𝑣 ← (H(𝐵), 𝑝𝑘, comVote, 𝜎)
+    27: else then ⊲ generating a comVote
+    28: 𝜎 ← Sig(𝑠𝑘, (H(𝐵), witVote))
+    29: 𝑣 ← (H(𝐵), 𝑝𝑘, witVote, 𝜎)
+    30: ProcessVote(𝑣)
+    31: Broadcast(𝑣)
+    32: procedure ProcessVote(𝑣)
+    33: if {𝐵|𝐵 ∈ 𝑀 ∧ H(𝐵) = 𝑣.ℎ𝑎𝑠ℎ} = ∅ then return
+    34: if ∃𝑣 ∈ 𝑉 [𝐵] then return
+    35: 𝑉 [𝐵] ← 𝑉 [𝐵] ∪ {𝑣 }    <span class="annotation">⊲ storing the vote</span>
+    36: if |𝑉 [𝐵] | ≥ 2𝑓 + 1 then
+    37: 𝐵′ ← UpdateHighestCertifiedBlock()
+    38: if |𝑉 [𝐵].comVote| ≥ 2𝑓 + 1 then
+    39: 𝐹 ← 𝐹 ∪ GetAncestorBlock(𝐵)
+</code>
+              </pre> -->
+        <h3 id="section4">EBFT-Turbo</h3>
+        <p>EBFT-Turbo is a high-performance partially synchronous BFT protocol based on EBFT-PSyn. It improves system
+            throughput and latency by using Bitcoin-NG's technology to separate transaction ordering and consensus.
+            Specifically, EBFT-Turbo stipulates that once a node solves the cryptographic lottery, it can generate a
+            fixed number of microblocks. These microblocks do not need to be voted on, but are directly certified. Only
+            regular blocks need to be voted on and committed, thereby reducing communication overhead.</p>
+        <h2>Implementation and Evaluation of the EBFT Algorithm</h2>
+        <p>We implemented the EBFT algorithm based on the Go version of Bitcoin, btcd, and evaluated its performance on
+            AWS. We implemented EBFT-Syn, EBFT-PSyn, and EBFT-Turbo with about 920 lines of code, which shows that their
+            design is simple. Our evaluation results show that on a cluster composed of 256 geographically distributed
+            nodes, EBFT-Turbo can achieve a throughput of 3.6k transactions per second and a latency of 8 seconds, which
+            can meet the needs of many blockchain applications.</p>
+        <h3 id="section5">Other Work</h3>
+        <p>We have implemented <a href="http://luoqihang123.me">a visualization of the two protocols of EBFT</a> to help
+            understand how EBFT works. If you want more details, go to the paper(<a
+                href="https://arxiv.org/abs/2012.01636">EBFT: Simplifying BFT Consensus Through Egalitarianism</a>)</p>
+    </div>
+</body>
+
+</html>
