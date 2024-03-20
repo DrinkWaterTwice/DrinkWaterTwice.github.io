@@ -30,7 +30,7 @@
 
             margin: 0 auto;
             padding: 30px;
-            background-color: #808080;
+            background-color: #b8b5b5;
             /* 设置背景颜色为浅蓝色 */
         }
 
@@ -207,8 +207,8 @@
         <header>
             <nav>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">about</a></li>
+                    <li><a href="https://arxiv.org/abs/2012.01636">Home</a></li>
+                    <li><a href="https://teecertlabs.com/team/">About</a></li>
                 </ul>
             </nav>
         </header>
@@ -353,12 +353,9 @@
         <p id="section3-3"><strong>Vote processing.</strong>When receiving a vote, a node will store the
             vote and map the vote with the block. After that, if the associated
             block becomes certified with no less than 2𝑓 + 1 (regardless of the
-            vote types), the node will update the highest certified block by the
-            function UpdateHighestCertifiedBlock(). Besides, if a block has
+            vote types), the node will update the highest certified block. Besides, if a block has
             no less than 2𝑓 + 1 comVotes, it will commit all non-committed
-            ancestor blocks of this block, excluding this block. Here, due to the
-            pipelining structure, nodes actually commit the parent blocks of
-            this block.</p>
+            ancestor blocks of this block, excluding this block. </p>
         <p id="section3-4">Since block producing is
             the same as that in the synchronous network, we do not introduce it here.</p>
             <!-- it here. The pseudocode of
