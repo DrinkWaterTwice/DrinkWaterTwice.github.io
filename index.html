@@ -1,52 +1,262 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EBFT</title>
-  <script src="script.js"></script>
-  <script src="node.js"></script>
-  <link rel="stylesheet" href="all.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBFT: An Equal Algorithm Simplifying BFT Consensus</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+
+            margin: auto;
+            width: 800px;
+            padding: 0;
+
+            line-height: 1.6;
+            font-size: 18px;
+            /* 设置默认字体大小为18px */
+
+            background-color: #6d695c;
+            background-image:
+                repeating-linear-gradient(120deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px),
+                repeating-linear-gradient(60deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px, transparent 1px, transparent 60px),
+                linear-gradient(60deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1)),
+                linear-gradient(120deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1));
+            background-size: 70px 120px;
+        }
+
+        .container {
+
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #eeeeee;
+            /* 设置背景颜色为浅蓝色 */
+        }
+
+        h1 {
+            color: #000000;
+            text-align: center;
+            padding: 0px 0;
+            font-size: 1.5rem;
+            /* 调整标题字体大小 */
+            font-weight: bold;
+        }
+
+        h2,
+        h3 {
+            color: #000000;
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+            /* 调整副标题字体大小 */
+        }
+
+        p,
+        ul {
+            color: #000000;
+            font-size: 0.9rem;
+            /* 调整段落字体大小 */
+            text-align: justify;
+        }
+
+        ul {
+            margin-left: 10px;
+        }
+
+        *-- header {
+            background-color: #f8f9fa;
+            padding: 5px;
+            border-bottom: 1px solid #000000;
+
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border-bottom: 1px solid #000000;
+
+        }
+
+        nav li {
+            float: left;
+        }
+
+        nav li a {
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 7px 8px;
+            text-decoration: underline;
+        }
+
+        nav li a:hover {
+            background-color: #ddd;
+        }
+
+        .codeBlock {
+            background-color: #8a8787;
+            border-style: solid;
+            border-width: 1px;
+            border-color: #000000;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .annotation {
+            color: #34353c;
+        }
+
+        #floatingMenu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #baa7a7;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #floatingMenu a {
+            text-decoration: none;
+            color: #000;
+            font-size: 0.8rem;
+            cursor: pointer;
+
+        }
+
+        #floatingMenu a:hover {
+            text-decoration: none;
+            color: #d0c3c3;
+            font-size: 0.7rem;
+            cursor: pointer;
+
+        }
+
+        .submenu {
+            display: none;
+            list-style-type: none;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .submenu ul li {
+            list-style: none;
+            margin-top: 3px;
+        }
+
+        #floatingMenu li {
+            list-style: none;
+            margin-top: 3px;
+        }
+    </style>
+    <script>
+        function toggleSubmenu(id) {
+            var submenu = document.getElementById(id);
+            if (submenu.style.display == "block") {
+                submenu.style.display = "none";
+            } else {
+                submenu.style.display = "block";
+            }
+        }
+    </script>
 </head>
-<body id="body" style="height: 100%; width: 100%; position: relative;">
-  <div class="navbar" >
-    <a href="https://arxiv.org/abs/2012.01636"> Simplifying BFT Consensus Through Egalitarianism
-    </a>
-    <div class="dropdown">
-      <button class="dropbtn">about 
-        <i class="fa fa-caret-down"></i>
-      </button>
-      <div class="dropdown-content">
-        <a href="https://arxiv.org/abs/2012.01636">paper</a>
-      </div>
-    </div>
-    <div class="dropdown">
-      <button class="dropbtn" id = "language">中文 
-        <i class="fa fa-caret-down"></i>
-      </button>
-      <div class="dropdown-content">
-        <a onclick="changeLanguage('Chinese')">简体中文</a>
-        <a onclick="changeLanguage('English')">English</a>
-      </div>
-    </div>  
-  </div>
 
-  <div id = "root1" style="height: 93%; width: 100%; background-color: #d9ebf3; position: relative;" >
-  <div id = "root" style="height: 72%; width: 100%; background-color: #d9ebf3;" ></div>
-  <div id = "root2" style="height: 13%; width: 100%; background-color: #d9ebf3;" ></div>
-  <div id = "root3" style="width: 100%; position: absolute; top: 80%; display: flex; justify-content: space-between; flex-direction:row;">
-    <button  class="css-button-arrow--black--left" style="margin: 2%;"  onclick="back()">
-      <span class="css-button-arrow__text" style="transform: scaleX(-1)">back</span>
-    </button>
-    <div style="width: 160px; ">
-        <button  class="css-button-arrow--black" style=" margin:2%;"  onclick="continueButtonFunction()">Continue</button>
-        <button  class="css-button-arrow--black" style=" margin:2%;" onclick="reRun()">rerun</button>
-    </div>
-  </div>
-  </div>
-  
-  
+<body>
 
-    
-  </body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="https://arxiv.org/abs/2012.01636">Paper</a></li>
+                    <li><a href="https://ebftalgorithm.github.io/animation.html">Animation</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <h1 id="title">EBFT: The Simplest BFT Consensus Framework</h1>
+
+        <p> EBFT, an egalitarian BFT consensus framework, which enjoys the same level of simplicity as Nakamoto
+            Consensus (NC), and
+            meanwhile has finality as classic BFT protocols. To this end, EBFT combines the best of the two worlds from NC and BFT:
+            the longest rule from NC and quorum voting from classic BFT. 
+            EBFT consists of two protocols: EBFT-Syn (in synchrony network) and EBFT-PSyn (in partial synchrony
+            network).
+            Due to the extreme simplicity, EBFT can be implemented atop any Nakamoto-style blockchains within
+            modification of hundreds of lines of code.
+        </p>
+
+        <h2 id="submenu2.1">EBFT Design</h2>
+        <p>The EBFT algorithm includes two protocols: EBFT-Syn in synchronous network and EBFT-PSyn in partially
+            synchronous network.
+            Both of them adhere to the Longest Certified Chain Rule (LCCR) for voting and proposing
+            blocks. However, while EBFT-Syn commits blocks using 3Δ, EBFT-PSyn commits blocks through uniqueness
+            announcement. Now we introduce some need preliminaries</p>
+
+        <h2 id="submenu2.1">Preliminaries</h2>
+        <p> <strong>Block. </strong> Block is a tuple <Txs, ℎ𝑝, 𝑄𝐶, 𝜌, 𝑚𝑒𝑡a>, where Txs is a collection
+             of transactions; ℎ𝑝 is the hash digest of the previous block (also called parent block); 𝑄𝐶 is the parent block's
+            quorum certificate; 𝜌 is the winning proof of the lottery; 𝑚𝑒𝑡𝑎
+            represents necessary metadata. 
+        </p>
+        <p><strong>Vote. </strong>
+            A vote 𝑣 of block 𝐵 is a tuple <ℎ, 𝑝𝑘, 𝜎>, where ℎ is the hash of the block
+            𝐵; 𝑝𝑘 is the node's public key; 𝜎 is a signature created by the node. If there is a set
+            of 𝑓 + 1 (or 2f+1) signatures on a block B, then the quorum
+            certificate (QC) of block B in EBFT-Syn (or EBFT-PSyn) is formed. 
+            When a node has a QC for a block, the block is certified. Each
+            node keeps track of all signatures for all blocks and keeps updating
+            certified blocks.
+        </p>
+        <p><strong>Block Tree. </strong>Blocks are chained by a sequence
+            of hash references and certificates. A block 𝐵 is called a descendant of another block 𝐵′ if 𝐵 extends
+            a chain including 𝐵′. Conversely, block 𝐵′ is an ancestor of block
+            𝐵. Two (distinct) blocks 𝐵 and 𝐵′
+            conflict if neither is a descendant
+            of the other. Because of the possibility of conflicting blocks, each
+            node maintains a block tree (referred to as 𝑏𝑙𝑜𝑐𝑘𝑇𝑟𝑒𝑒) of received
+            blocks. In addition, certified blocks are ranked by their heights, and
+            a certified block with the biggest height in the local 𝑏𝑙𝑜𝑐𝑘𝑇𝑟𝑒𝑒 is
+            referred to as the highest certified block.
+        </p>
+        <p>
+
+        </p>
+        <h3 id="submenu2">EBFT-Syn</h3>
+        <p>EBFT-Syn is a synchronous BFT protocol, in which the minority of nodes (f
+         nodes out of 2f+1 nodes) are Byzantine, i.e., not following the protocol. In synchronous networks,
+            there is a known upper bound Δ for all messages to be successfully delivered.
+            EBFT-Syn includes three simple rules:</p>
+
+
+        <p id="section2-4"><strong>Block proposing.</strong> Nodes participate in the cryptographic lottery (as any PoW and PoS blockchains) to win the
+            chance of producing blocks, which extend the longest path in the certified block tree. </p>
+        <p id="section2-5"><strong>Block voting.</strong> An honest node vote for a valid block that extend the longest path,
+             and broadcast its vote and received block to other nodes. Meanwhile, it sets a 3Δ timer for this block 
+             (See our paper for why choosing a 3Δ timer). If a block is certified, it will be added to the block tree. 
+        </p>
+        <p id="section2-6"><strong>Block committing.</strong>  If a timer of a block expires, and the node does not receive any
+             blocks conflicting with this block, the node will commit this block and all uncommitted ancestor
+            blocks. </p>
+
+        <h3>EBFT-PSyn</h3>
+        <p>EBFT-PSyn is a partially synchronous BFT protocol, in which one-third of nodes (f
+            nodes out of 3f+1 nodes) are Byzantine. EBFT-PSyn use the same block proposing rule as EBFT-Syn.</p>
+
+        <p id="section3-2"><strong>Block voting. </strong> Like EBFT-Syn, an honest node vote for a valid block B that extend the longest path,
+            and broadcast its vote and received block to other nodes. However, there are two type of votes decided by the parent block. 
+            If B's parent block is uniquely certified, the node can send a commit votes (comVote).
+            Otherwise, it sends a witness vote (witVote). Note that for each block, a node only votes once, but
+            a node can vote for multiple blocks at the same height. A block is certified with no less than 2𝑓 + 1 (regardless of the
+            vote types). 
+        </p> 
+        <p id="section3-3"><strong>Block committing. </strong>If a block has
+            no less than 2𝑓 + 1 comVotes, it will commit all non-committed
+            ancestor blocks of this block, excluding this block. </p>
+    </div>
+</body>
+
 </html>
