@@ -6,8 +6,9 @@ var budingy = 10;
 function createTimer(id,left,top,r,time,height,color) {
  var cancel = false;
  var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
- circle.setAttribute("width", "auto");
- circle.setAttribute("height", "auto");
+ circle.setAttribute("width", "1");
+ circle.setAttribute("height", "1");
+ circle.setAttribute("viewBox", "0 0 100 100");
 circle.style.left = (left + budingx) + "%"
 circle.style.top = (top + budingy) + "%"; 
  circle.style.position = "absolute";
@@ -165,8 +166,9 @@ circle.style.top = (top + budingy) + "%";
 function createWaitState(id,left,top,r,outColor,innerColor, height) {
 
 var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
-circle.setAttribute("width", "auto");
-circle.setAttribute("height", "auto");
+circle.setAttribute("width", "1");
+circle.setAttribute("height", "1");
+circle.setAttribute("viewBox", "0 0 100 100");
 circle.style.left = (left + budingx) + "%"
 circle.style.top = (top + budingy) + "%";
 circle.style.position = "absolute";
@@ -250,8 +252,9 @@ if(master == 0)
 function createSingleNode(left,top,r){
 id = 1
 var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
- circle.setAttribute("width", "auto");
- circle.setAttribute("height", "auto");
+ circle.setAttribute("width", "1");
+ circle.setAttribute("height", "1");
+ circle.setAttribute("viewBox", "0 0 100 100");
   circle.style.left = (left + budingx) + "%"
   circle.style.top = (top + budingy) + "%";
 
@@ -367,8 +370,9 @@ function createVote(x, y,color,text, outColor) {
   circle.style.top = (bsaey + budingy) + "%";
   circle.style.position = "absolute";
   circle.style.zIndex = "1";
-  circle.setAttribute("height", "auto");
-  circle.setAttribute("width", "auto");
+  circle.setAttribute("height", "1");
+  circle.setAttribute("width", "1");
+  circle.setAttribute("viewBox", "0 0 100 100");
   circle.style.overflow = "visible"
   circle.style.zIndex = "19";
 
@@ -415,8 +419,9 @@ function createBlock(x, y, width, height, color, status, number) {
   block.style.position = "absolute";
   //用这个来标记这个是一个block
   block.style.zIndex = "13";
-  block.setAttribute("height", "auto");
-  block.setAttribute("width", "auto");
+  block.setAttribute("height", "1");
+  block.setAttribute("width", "1");
+  block.setAttribute("viewBox", "0 0 100 100");
   //当svg内元素溢出时不隐藏
   block.style.overflow = "visible"
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -466,8 +471,9 @@ function createBlockFree(x, y, width, height, color, status, number) {
   block.style.position = "absolute";
   block.style.zIndex = "14";
   block.style.overflow = "visible"
-  block.setAttribute("height", "auto");
-  block.setAttribute("width", "auto");
+  block.setAttribute("height", "1");
+  block.setAttribute("width", "1");
+  block.setAttribute("viewBox", "0 0 100 100");
 
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   innerCircle.setAttribute("fill", color);
