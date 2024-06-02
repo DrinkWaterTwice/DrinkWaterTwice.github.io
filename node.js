@@ -415,8 +415,8 @@ function createBlock(x, y, width, height, color, status, number) {
   block.style.position = "absolute";
   //用这个来标记这个是一个block
   block.style.zIndex = "13";
-  block.setAttribute("height", "100");
-  block.setAttribute("width", "100");
+  block.setAttribute("height", "auto");
+  block.setAttribute("width", "auto");
   //当svg内元素溢出时不隐藏
   block.style.overflow = "visible"
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
