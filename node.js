@@ -8,7 +8,6 @@ function createTimer(id,left,top,r,time,height,color) {
  var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
  circle.setAttribute("width", "1");
  circle.setAttribute("height", "1");
- circle.setAttribute("viewBox", "0 0 100 100");
 circle.style.left = (left + budingx) + "%"
 circle.style.top = (top + budingy) + "%"; 
  circle.style.position = "absolute";
@@ -168,7 +167,8 @@ function createWaitState(id,left,top,r,outColor,innerColor, height) {
 var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
 circle.setAttribute("width", "1");
 circle.setAttribute("height", "1");
-circle.setAttribute("viewBox", "0 0 100 100");
+circle.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
 circle.style.left = (left + budingx) + "%"
 circle.style.top = (top + budingy) + "%";
 circle.style.position = "absolute";
@@ -254,7 +254,6 @@ id = 1
 var circle = document.createElementNS("http://www.w3.org/2000/svg","svg");
  circle.setAttribute("width", "1");
  circle.setAttribute("height", "1");
- circle.setAttribute("viewBox", "0 0 100 100");
   circle.style.left = (left + budingx) + "%"
   circle.style.top = (top + budingy) + "%";
 
@@ -372,7 +371,6 @@ function createVote(x, y,color,text, outColor) {
   circle.style.zIndex = "1";
   circle.setAttribute("height", "1");
   circle.setAttribute("width", "1");
-  circle.setAttribute("viewBox", "0 0 100 100");
   circle.style.overflow = "visible"
   circle.style.zIndex = "19";
 
@@ -421,7 +419,6 @@ function createBlock(x, y, width, height, color, status, number) {
   block.style.zIndex = "13";
   block.setAttribute("height", "1");
   block.setAttribute("width", "1");
-  block.setAttribute("viewBox", "0 0 100 100");
   //当svg内元素溢出时不隐藏
   block.style.overflow = "visible"
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -473,7 +470,6 @@ function createBlockFree(x, y, width, height, color, status, number) {
   block.style.overflow = "visible"
   block.setAttribute("height", "1");
   block.setAttribute("width", "1");
-  block.setAttribute("viewBox", "0 0 100 100");
 
   var innerCircle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   innerCircle.setAttribute("fill", color);
