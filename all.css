@@ -179,3 +179,16 @@ li a:hover {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+
+p {
+  font-family: font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", STXihei, "Microsoft YaHei", SimHei, "WenQuanYi Micro Hei"; 
+}
+
+body.chinese p{
+  font-family: font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", STXihei, "Microsoft YaHei", SimHei, "WenQuanYi Micro Hei"; 
+}
+
+body.english p{
+  font-family: 'Arial', sans-serif;
+}
